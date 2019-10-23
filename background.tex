@@ -1,0 +1,104 @@
+\section{Background and Motivation}
+\labelsec{background}
+
+
+The background of the paper is about the  model/architecture adopted in BDI-based practical reasoning agents and, in particular, the plan model adopted.
+%
+In literature our main references as:
+%
+\begin{itemize}
+\item PRS, dMARS, JAM, SPARK, ...
+\item languages: AgentSpeak(L), Jason, ASTRA, CAN...
+\end{itemize}
+%
+
+%
+% CONCEPTUAL MILESTONES
+%
+Conceptual milestones of the model:
+\begin{itemize}
+\item Plans --  how to bring about a state of affairs. 
+\item Intentions --  a specific state of affairs that the agent is committed to achieve and the activity (plan in execution) used to that purpose
+\end{itemize}
+
+%
+% HOW IT IS IMPLEMENTED/MODELED
+%
+How it is implemented and formalised in concrete computational architectures:
+\begin{itemize}
+\item briefly describe the plan model, as appear in dMARS, AgentSpeak and CAN
+\end{itemize}
+
+%
+% WHAT ARE THE PROBLEMS THAT WE SEE
+%
+By exploiting the model in practice in AOP, two main relevant issues emerged---described in the following.
+
+\subsection{About invocation conditions and data-driven / event-driven processing}
+
+In PRS/dMARS/.. plan model, invocation conditions are meant to represent the circumstances under which the plan should be considered, usually specified in terms of events.
+%
+Example in dMARS paper: plan "makeTea" may be triggered by the event "thirsty".
+
+So the "invocation condition" in plans could be an event concerning not only goals ("I want to make a tea" or "I need to bring about a state of affairs in which I have a tea") but belief changes concerning percepts from environment or data in general.
+%
+This makes it possible to define "reacting behaviour" and "data-driven / event-driven processing." - as defined in dMARS \& co papers.
+
+Two critical remarks here, as soon as we consider concrete computational models and engineering perspective:
+
+First, from the example: there could be multiple reasons for making a tea, not only being thirsty. The plan - as recipe for making the tea - would be the same. However, if we put the triggering condition in the plan, that plan cannot be reused for different triggering conditions.
+%
+In this case the invocation condition appears better modelled as the motivation for adopting some specific goal ("to make a tea") and we can have different plans for it depending on the context.
+%
+But being thirsty in this case would not be part the plan itself.
+
+Then,  from a designer/engineer point of view, the reactive behaviour of an agent is always motivated by some task to be achieved, a "state of affair" to be achieved? 
+%
+In the example, the goal is to make a tea, to have a new tea. A robot reacting to low-battery charge and goes back to recharge station is because of e.g. a maintenance task that could be "keep the battery level not lower than XX".
+%
+
+In concrete computational models, plans triggered by invocation conditions that concern environment/data events, this state of affairs remains implicit, in the mind of the designer.
+%
+This has a drawback at runtime: intentions that are created to execute the plan are task-less/goal-less, have not an explicit "state of affair".
+%
+This violates both the conceptual milestones, and makes it more difficult for agents to reason about what they are doing at runtime.
+
+Examples in AgentSpeak(L), PRS, dMARS, ...
+
+% So we propose here a plan model which would enforce goal-task orientation, so that the "invoking condition" is always a goal/task to be achieved or maintained.
+
+\subsection{About the body of plans in the plan model}
+
+in PR/PRS/... plan body is meant to represent the recipe about how to achieve the state of affairs.
+%
+If we consider human behaviour, such a recipe could include also reactive behaviours - that are conceptually part of the same strategy/plan.
+%
+That is: humans  flexibly mixes event-driven and process driven behaviour in the way in which do their tasks.
+%
+Example: ...
+
+Event-driven behaviour and reactions is not always to manage exceptions, but could be part of the "complex course of actions and subgoals" to achieve/maintain some task.  
+%
+E.g., event-driven behaviour is almost the main type of behaviour in maintenance tasks.
+
+In AI and historically, the body of plans did not include events, but a classic process-oriented approach has been always considered.
+%
+This lead to "wait for" family actions. These could be effective when from some specific point of time on we want to wait some event. 
+%
+However they are not an effective way to model all the possible reactive behaviour.
+%
+For instance: recharge battery case.
+
+In particular wait for a "synchronous" management of events. However most cases are more "asynchronous".
+
+Besides, they could be error-prone. 
+%
+For instance, in a course of action like: \texttt{a1; a2; wait for e; a3; a4}.
+%
+If the event e is happening after the action "wait for e" the semantics is clear, we know what happens: the plan is suspended until e occurs and then it goes on with a3. But what happens if e happens before the execution of "wait for e" e.g. between a1 and a2 or a2 and wait? It depends. It is a problematic case.
+
+% So from an design/programming perspective, we see here the opportunity to improve the modularity/encapsulation of plans by allowing to specify more easily and effectively the reactive behaviour inside the body of the plan, as part of the strategy to achieve or maintain some task, which may include also further not-reactive behaviours.
+
+
+
+
